@@ -181,18 +181,26 @@ void deleteTree(Node* node) {
     delete node;
 }
 
-void imprimir_avl() {
-    vector<Estudiante*> alumnos;
+Node* construir_avl(vector<Estudiante*>& alumnos) {
     const string ruta_csv = "nombre_apellido.csv";
 
-    if (!Estudiante::cargar_estudiantes_desde_csv(ruta_csv, alumnos)) {
+    if (!Estudiante::cargar_estudiantes(ruta_csv, alumnos)) {
         cerr << "No se pudo abrir el archivo CSV: " << ruta_csv << endl;
-        return;
+        return nullptr;
     }
 
     Node* root = nullptr;
     for (Estudiante* e : alumnos) {
         root = insertNode(root, e);
+    }
+    return root;
+}
+
+void imprimir_avl_apellido() {
+    vector<Estudiante*> alumnos;
+    Node* root = construir_avl(alumnos);
+    if (!root) {
+        return;
     }
 
     cout << "\n=== AVL por apellido ===" << endl;
@@ -200,6 +208,21 @@ void imprimir_avl() {
     cout << "==============================" << endl;
     int indice_alumno = 1;
     inorder(root, indice_alumno);
+
+    deleteTree(root);
+}
+
+void imprimir_avl_arbol() {
+    vector<Estudiante*> alumnos;
+    Node* root = construir_avl(alumnos);
+    if (!root) {
+        return;
+    }
+
+    cout << "\n=== AVL en formato de arbol ===" << endl;
+    cout << "Total: " << alumnos.size() << endl;
+    cout << "==============================" << endl;
+    imprimir_formato_arbol(root);
 
     deleteTree(root);
 }
