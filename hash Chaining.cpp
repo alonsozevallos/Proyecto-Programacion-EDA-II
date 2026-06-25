@@ -27,17 +27,10 @@ HashTable::~HashTable() {
 
 int HashTable::hashFunction(const std::string& codigo) const {
     int hash = 0;
-    for (size_t i = 0; i < codigo.length(); i++) {
+    for (size_t i = 0; i < codigo.length(); ++i) {
         hash = (hash * 31 + codigo[i]) % TABLE_SIZE;
     }
     return hash;
-}
-
-void HashTable::insertar(Estudiante* e) {
-    int index = hashFunction(e->codigo);
-    HashNode* nuevo = new HashNode(new Estudiante(*e));
-    nuevo->next = bins[index];
-    bins[index] = nuevo;
 }
 
 bool HashTable::esta_vacia() const {
@@ -47,6 +40,36 @@ bool HashTable::esta_vacia() const {
         }
     }
     return true;
+}
+
+void HashTable::mostrar_bin(int index) const {
+    std::cout << "Bin [" << std::setw(2) << index << "]: ";
+    HashNode* current = bins[index];
+    if (!current) {
+        std::cout << "vacío";
+    }
+    while (current) {
+        std::cout << "[" << current->estudiante->codigo
+                  << " - " << current->estudiante->apellidos
+                  << ", " << current->estudiante->primer_nombre << "]";
+        if (current->next) {
+            std::cout << " -> ";
+        }
+        current = current->next;
+    }
+    std::cout << std::endl;
+}
+
+void HashTable::insertar(Estudiante* e, bool mostrar_bin_resultado) {
+    int index = hashFunction(e->codigo);
+    HashNode* nuevo = new HashNode(new Estudiante(*e));
+    nuevo->next = bins[index];
+    bins[index] = nuevo;
+
+    if (mostrar_bin_resultado) {
+        std::cout << "Estudiante agregado en:" << std::endl;
+        mostrar_bin(index);
+    }
 }
 
 void HashTable::llenar_hash() {
@@ -62,12 +85,12 @@ void HashTable::llenar_hash() {
     }
 
     if (alumnos.empty()) {
-        std::cerr << "No se cargaron alumnos para HashTable." << std::endl;
+        std::cerr << "No se cargaron alumnos para el HashTable." << std::endl;
         return;
     }
 
     for (Estudiante* e : alumnos) {
-        insertar(e);
+        insertar(e, false);
     }
 
     for (Estudiante* e : alumnos) {
@@ -75,19 +98,27 @@ void HashTable::llenar_hash() {
     }
 }
 
-Estudiante* HashTable::buscar(const std::string& codigo) const {
+Estudiante* HashTable::buscar(const std::string& codigo) {
+    llenar_hash();
+
     int index = hashFunction(codigo);
     HashNode* current = bins[index];
     while (current) {
         if (current->estudiante->codigo == codigo) {
+            std::cout << "Estudiante " << current->estudiante->apellidos << " encontrado en:" << std::endl;
+            mostrar_bin(index);
             return current->estudiante;
         }
         current = current->next;
     }
+
+    std::cout << "No se encontro al estudiante con codigo: " << codigo << std::endl;
     return nullptr;
 }
 
 bool HashTable::eliminar(const std::string& codigo) {
+    llenar_hash();
+
     int index = hashFunction(codigo);
     HashNode* current = bins[index];
     HashNode* prev = nullptr;
@@ -100,11 +131,16 @@ bool HashTable::eliminar(const std::string& codigo) {
             }
             delete current->estudiante;
             delete current;
+            std::cout << "Estudiante eliminado: " << codigo << std::endl;
+            std::cout << "Bin actualizado:" << std::endl;
+            mostrar_bin(index);
             return true;
         }
         prev = current;
         current = current->next;
     }
+
+    std::cout << "No se encontro al estudiante con codigo: " << codigo << std::endl;
     return false;
 }
 
@@ -115,7 +151,7 @@ void HashTable::mostrar() {
     std::cout << "Tamaño de tabla: " << TABLE_SIZE << std::endl;
     std::cout << "=========================================" << std::endl;
     for (int i = 0; i < TABLE_SIZE; ++i) {
-        std::cout << "Bin ["<<std::setw(2)<< i <<"]: ";
+        std::cout << "Bin [" << std::setw(2) << i << "]: ";
         HashNode* current = bins[i];
         if (!current) {
             std::cout << "vacío";
@@ -124,7 +160,9 @@ void HashTable::mostrar() {
             std::cout << "[" << current->estudiante->codigo
                       << " - " << current->estudiante->apellidos
                       << ", " << current->estudiante->primer_nombre << "]";
-            if (current->next) std::cout << " -> ";
+            if (current->next) {
+                std::cout << " -> ";
+            }
             current = current->next;
         }
         std::cout << std::endl;

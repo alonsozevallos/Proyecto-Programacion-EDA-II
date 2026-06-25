@@ -7,16 +7,13 @@
 int main() {
     Estudiante estudiante;
     estudiante.mostrar_informacion();
-
+    imprimir_avl();
     HashTable tabla_hash;
     tabla_hash.mostrar();
-
-    Estudiante alumno_nuevo("CS1001", "Perez", "Juan", 15.5);
-    tabla_hash.insertar(&alumno_nuevo);
-    tabla_hash.mostrar();
-
-    imprimir_avl_apellido();
-    imprimir_avl_arbol();
+    std::cout << "" << std::endl;
+    tabla_hash.buscar("CS1299");
+    std::cout << "" << std::endl;
+    tabla_hash.eliminar("CS1299");
 
     return 0;
 }
