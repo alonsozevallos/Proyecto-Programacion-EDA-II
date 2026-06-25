@@ -129,13 +129,13 @@ void imprimir_formato_arbol(Node* root) {
     }
 
     const int h = altura_arbol(root);
-    const int ancho_celda = 8;
+    const int ancho_celda = 10;
 
     auto etiqueta = [](const string& apellido) {
-        if (apellido.size() <= 8) {
+        if (apellido.size() <= 10) {
             return apellido;
         }
-        return apellido.substr(0, 8);
+        return apellido.substr(0, 10);
     };
 
     queue<Node*> q;
@@ -167,7 +167,7 @@ void imprimir_formato_arbol(Node* root) {
                 cout << string(bloques_intermedios * factor_espacio, ' ');
             }
         }
-        cout << "\n\n";
+        cout << "\n";
     }
 }
 
@@ -196,30 +196,14 @@ Node* construir_avl(vector<Estudiante*>& alumnos) {
     return root;
 }
 
-void imprimir_avl_apellido() {
+void imprimir_avl() {
     vector<Estudiante*> alumnos;
     Node* root = construir_avl(alumnos);
     if (!root) {
         return;
     }
 
-    cout << "\n=== AVL por apellido ===" << endl;
-    cout << "Total: " << alumnos.size() << endl;
-    cout << "==============================" << endl;
-    int indice_alumno = 1;
-    inorder(root, indice_alumno);
-
-    deleteTree(root);
-}
-
-void imprimir_avl_arbol() {
-    vector<Estudiante*> alumnos;
-    Node* root = construir_avl(alumnos);
-    if (!root) {
-        return;
-    }
-
-    cout << "\n=== AVL en formato de arbol ===" << endl;
+    cout << "\n=== AVL ===" << endl;
     cout << "Total: " << alumnos.size() << endl;
     cout << "==============================" << endl;
     imprimir_formato_arbol(root);

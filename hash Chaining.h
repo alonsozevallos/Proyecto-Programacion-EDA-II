@@ -5,7 +5,7 @@
 
 #include <string>
 
-const int TABLE_SIZE = 11;
+const int TABLE_SIZE = 50;
 
 struct HashNode {
     Estudiante* estudiante;
@@ -21,13 +21,14 @@ private:
     int hashFunction(const std::string& codigo) const;
     bool esta_vacia() const;
     void llenar_hash();
+    void mostrar_bin(int index) const;
 
 public:
     HashTable();
     ~HashTable();
 
-    void insertar(Estudiante* e);
-    Estudiante* buscar(const std::string& codigo) const;
+    void insertar(Estudiante* e, bool mostrar_bin = true);
+    Estudiante* buscar(const std::string& codigo);
     bool eliminar(const std::string& codigo);
     void mostrar();
 };

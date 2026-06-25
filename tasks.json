@@ -4,7 +4,7 @@
     {
       "label": "Build and Run Proyecto EDA II",
       "type": "shell",
-      "command": "g++ -std=c++17 main.cpp avl.cpp estudiante.cpp -o main.exe; if ($LASTEXITCODE -eq 0) { .\\main.exe }",
+      "command": "g++ -std=c++17 main.cpp avl.cpp estudiante.cpp \"hash Chaining.cpp\" -o main.exe; if ($LASTEXITCODE -eq 0) { .\\main.exe }",
       "options": {
         "cwd": "${workspaceFolder}"
       },
