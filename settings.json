@@ -1,5 +1,0 @@
-{
-  "code-runner.executorMap": {
-    "cpp": "cd \"$dir\" && g++ -std=c++17 main.cpp avl.cpp estudiante.cpp \"hash Chaining.cpp\" -o main && .\\main"
-  }
-}
